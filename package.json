@@ -1,0 +1,32 @@
+{
+  "name": "cli-gerenciador-tarefas",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Sofia Josafá",
+  "license": "ISC",
+  "description": "Gerenciador de tarefas",
+  "dependencies": {
+    "@prisma/client": "^6.16.0",
+    "date-fns": "^4.1.0",
+    "inquirer": "^12.9.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "prisma": "^6.16.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sosojosafars/gerenciador_tarefas.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sosojosafars/gerenciador_tarefas/issues"
+  },
+  "homepage": "https://github.com/sosojosafars/gerenciador_tarefas#readme"
+}

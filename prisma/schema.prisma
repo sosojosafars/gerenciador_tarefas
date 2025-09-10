@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Tarefa {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  titulo      String
+  descricao   String?
+  isCompleta  Boolean      @default(false)
+  dataCriacao DateTime     @default(now())
+  agendamento Agendamento?
+}
+
+model Agendamento {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  tarefaId   String   @unique @db.ObjectId
+  dataLimite DateTime
+  isAtrasado Boolean  @default(false)
+
+  tarefa     Tarefa   @relation(fields: [tarefaId], references: [id])
+}
