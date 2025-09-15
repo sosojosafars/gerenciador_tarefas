@@ -23,3 +23,9 @@ export const atualizarStatusAgendamento = async () => {
     });
   }
 };
+
+export const deletarAgendamentoPorTarefaId = async (tarefaId) => {
+  return prisma.agendamento.deleteMany({
+    where: { tarefaId },
+  });
+};

@@ -8,6 +8,7 @@ import {
 import {
   adicionarAgendamento,
   atualizarStatusAgendamento,
+  deletarAgendamentoPorTarefaId
 } from "./agendamentoModel.js";
 import {
   mostrarMenu,
@@ -18,11 +19,21 @@ import {
 
 export const adicionarNovaTarefa = async () => {
   const dados = await coletarDadosTarefa();
-  const tarefa = await criarTarefa(dados);
-  if (dados.prazo) {
-    await adicionarAgendamento(tarefa.id, dados.prazo);
+
+  if (!dados.titulo || dados.titulo.trim() === "") {
+    mostrarMensagem("Erro: O título da tarefa não pode ser vazio.");
+    return;
   }
-  mostrarMensagem("Tarefa criada com sucesso!");
+
+  try {
+    const tarefa = await criarTarefa(dados);
+    if (dados.prazo) {
+      await adicionarAgendamento(tarefa.id, dados.prazo);
+    }
+    mostrarMensagem("Tarefa criada com sucesso!");
+  } catch (error) {
+    mostrarMensagem("Erro ao criar tarefa. Tente novamente.");
+  }
 };
 
 export const listarTodasTarefas = async () => {
@@ -35,16 +46,30 @@ export const completarTarefa = async () => {
   const { id } = await inquirer.prompt([
     { type: "input", name: "id", message: "Digite o ID da tarefa a completar:" },
   ]);
-  await atualizarTarefa(id, { isCompleta: true });
-  mostrarMensagem("Tarefa concluída!");
+
+  try {
+    await atualizarTarefa(id, { isCompleta: true });
+    mostrarMensagem("Tarefa concluída!");
+  } catch (error) {
+    mostrarMensagem("Erro ao completar tarefa. Verifique se o ID está correto.");
+  }
 };
 
 export const removerTarefa = async () => {
   const { id } = await inquirer.prompt([
     { type: "input", name: "id", message: "Digite o ID da tarefa a remover:" },
   ]);
-  await deletarTarefa(id);
-  mostrarMensagem("Tarefa removida!");
+
+  try {
+    await deletarAgendamentoPorTarefaId(id);
+
+    await deletarTarefa(id);
+
+    mostrarMensagem("Tarefa removida!");
+  } catch (error) {
+    console.error("Detalhes do erro ao remover tarefa:", error);
+    mostrarMensagem("Erro ao remover tarefa. Verifique se o ID está correto.");
+  }
 };
 
 export const iniciarApp = async () => {
@@ -52,7 +77,7 @@ export const iniciarApp = async () => {
   while (!sair) {
     const opcao = await mostrarMenu();
     switch (opcao) {
-      case "Criar nova tarefa":
+      case "Nova tarefa":
         await adicionarNovaTarefa();
         break;
       case "Listar tarefas":
